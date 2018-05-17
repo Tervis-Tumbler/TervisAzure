@@ -22,27 +22,3 @@ function Connect-ToAzure {
         Login-AzureRmAccount -Credential $AzureCredential -SubscriptionId "8b3835b7-ddd8-41fc-9ee1-297bfe67e2a3"
     }
 }
-
-function Invoke-AzureAdConnectorProvision {
-    Invoke-ApplicationProvision -ApplicationName AzureAdConnector
-    $Nodes = Get-TervisApplicationNode -ApplicationName AzureAdConnector -IncludeVM
-    
-}
-
-function Invoke-InstallAndConfigureAzureADConnect {
-    [CmdletBinding()]
-    param(
-        [parameter(ValueFromPipelineByPropertyName,Mandatory)]$Computername,
-        [parameter(ValueFromPipelineByPropertyName,Mandatory)]$Credential
-    )
-    process {
-        Invoke-Command -ComputerName $Computername -Credential $Credential -ScriptBlock {
-            Install-Module MSOnline
-        }
-        Invoke-Command -ComputerName $Computername -Credential $Credential -ScriptBlock {
-            & "\\tervis.prv\applications\Installers\Microsoft\Azure AD Connect\AzureADConnect.msi"
-        }
-        
-
-    }
-}
